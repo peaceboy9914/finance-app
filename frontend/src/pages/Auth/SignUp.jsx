@@ -1,16 +1,20 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/inputs/Input';
 import ProfilePhotoSelector from '../../components/inputs/ProfilePhotoSelector';
 import { validateEmail } from '../../utils/helper';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATH } from '../../utils/apiPath';
+import { UserContext } from '../../context/userContext';
+import uploadImage from '../../utils/uploadImage';
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
-  const [fullName, setFullName] = useState('');
+  const [name, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {updateUser} = useContext(UserContext);
 
   const [error, setError] = useState('');
 
@@ -21,7 +25,7 @@ const SignUp = () => {
 
     let profileUrl = '';
 
-    if(!fullName) {
+    if(!name) {
       setError('Please enter your full name');
       return;
     }
@@ -37,6 +41,34 @@ const SignUp = () => {
     setError('');
 
     // Call the signup API here
+    try {
+
+      if(profilePic) {
+        const imageUploadRes = await uploadImage(profilePic);
+        profileUrl = imageUploadRes.imageUrl || '';
+      }
+      const response = await axiosInstance.post(API_PATH.AUTH.REGISTER, {
+        name,
+        email,
+        password,
+        profileUrl
+      });
+
+      const {token, user} = response.data;
+
+      if(token) {
+        localStorage.setItem('token', token);
+        updateUser(user);
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      if(error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Something went wrong, please try again later');
+        console.log(error);
+      }
+    }
   }
 
   return (
@@ -50,7 +82,7 @@ const SignUp = () => {
           <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <Input
-              value={fullName}
+              value={name}
               onChange={(e) => setFullName(e.target.value)}
               label='Full Name'
               placeholder='John Doe'
