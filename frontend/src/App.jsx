@@ -10,18 +10,16 @@ import UserProvider from './context/userContext'
 const App = () => {
   return (
     <UserProvider>
-      <div>
         <Router>
           <Routes>
             <Route path="/" element={<Root />} />
             <Route path="/dashboard" element={<Home />} />
             <Route path="/login" element={<Login/>} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/income" element={<Income />} />
+             <Route path="/income" element={<Income />} />
             <Route path="/expense" element={<Expense />} />
           </Routes>
         </Router>
-      </div>
     </UserProvider>
   )
 }

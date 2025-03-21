@@ -11,19 +11,19 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('');
-  const {updateUser} = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
 
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if(!validateEmail(email)) {
+    if (!validateEmail(email)) {
       setError('Please enter a valid email address')
       return;
     }
 
-    if(!password) {
+    if (!password) {
       setError('Please enter a password')
       return;
     }
@@ -36,42 +36,43 @@ const Login = () => {
         email,
         password
       });
-      const {token, user} = response.data;
+      const { token, user } = response.data;
 
-      if(token) {
+      if (token) {
         localStorage.setItem("token", token);
-        updateUser(user);
+        updateUser(user); // Ensure this is called with correct user data
         navigate('/dashboard');
       }
-    } catch(error) {
+    } catch (error) {
       if (error.response && error.response.data.message) {
         setError(error.response.data.message);
       } else {
-        setError("Somthing went wrong, pleased try again later")
+        setError("Something went wrong, please try again later")
         console.log(error)
       }
     }
   }
+
   return (
     <AuthLayout>
       <div className='lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center'>
-      <h3 className='text-xl font-semibold text-black'>Welcome Back</h3>
-      <p className='text-xs text-slate-700 mt-[5px] mb-6'>
-        Please login to your account
-      </p>
-      <form onSubmit={handleLogin}>
-        <Input 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          label="Email Address"
-          placeholder="user@example.com"
-          type="text" />
-        <Input 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          label="Password"
-          placeholder=""
-          type="password" />
+        <h3 className='text-xl font-semibold text-black'>Welcome Back</h3>
+        <p className='text-xs text-slate-700 mt-[5px] mb-6'>
+          Please login to your account
+        </p>
+        <form onSubmit={handleLogin}>
+          <Input 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            label="Email Address"
+            placeholder="user@example.com"
+            type="text" />
+          <Input 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            label="Password"
+            placeholder=""
+            type="password" />
 
           {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
 
@@ -82,10 +83,10 @@ const Login = () => {
           <p className='text-[13px] text-slate-800 mt-3'>
             Don't have an account?{" "}
             <Link className='font-medium text-primary underline' to="/signup">
-            SignUp
+              SignUp
             </Link>
           </p>
-      </form>
+        </form>
       </div>
     </AuthLayout>
   )
