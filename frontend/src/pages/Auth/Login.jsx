@@ -37,9 +37,11 @@ const Login = () => {
         password
       });
       const { token, user } = response.data;
+      console.log('User:', response.data);
 
       if (token) {
         localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
         updateUser(user); // Ensure this is called with correct user data
         navigate('/dashboard');
       }

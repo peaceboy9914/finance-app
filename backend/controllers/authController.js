@@ -46,15 +46,15 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({message: "Please provide all fields"});
         }
 
-        const checkUser = await User.findOne({email});
-        if(!checkUser || !(await bcrypt.compare(password, checkUser.password))) {
+        const user = await User.findOne({email});
+        if(!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({message: "Invalid credentials"});
         }
     
         res.status(200).json({
             message: "Login successful",
-            checkUser,
-            token: generateToken(checkUser._id),
+            user,
+            token: generateToken(user._id),
         });
     } catch(error) {
         res.status(500).json({message: "Something went wrong"});
