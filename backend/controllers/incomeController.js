@@ -25,9 +25,24 @@ exports.addIncome = async(req, res) => {
         res.status(500).json({ message: "Server Error"})
     }
 }
-exports.getAllIncome = (req, res) => {}
-exports.DategetAllIncome = (req, res) => {}
-exports.deleteIncome = (req, res) => {}
+exports.getAllIncome = async(req, res) => {
+    const userId = req.user.id;
+    
+        try{
+            const income = await Income.find({ userId }).sort({ date: -1 });
+            res.status(200).json(income);
+        } catch (error) {
+            res.status(500).json({ message: "Server Error"})
+        }
+}
+exports.deleteIncome = async(req, res) => {
+     try{
+            await Income.findByIdAndDelete(req.params.id);
+            res.json({message: "Expense deleted successfully"})
+        } catch (error) {
+            res.status(500).json({ message: "Server Error"})
+        }
+}
 exports.downloadIncomeExcel = async(req, res) => {
     const userId = req.user.id
 
