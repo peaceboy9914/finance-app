@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { UserContext } from '../../context/userContext'
 import NavBar from './NavBar'
 import SideMenu from './SideMenu'
@@ -6,17 +6,13 @@ import SideMenu from './SideMenu'
 const DashboardLayout = ({ children, activeMenu }) => {
   const { user } = useContext(UserContext)
 
-  useEffect(() => {
-    console.log('User context:', user)
-  }, [user])
-
   return (
     <div className=''>
       <NavBar activeMenu={activeMenu} />
 
       {user && (
         <div className="flex">
-          <div className='hidden md:block'>
+          <div className='hidden lg:block'>
             <SideMenu activeMenu={activeMenu} />
           </div>
 
