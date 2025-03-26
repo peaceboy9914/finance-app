@@ -25,7 +25,6 @@ const Home = () => {
 
       if(response.data) {
         setDashboardData(response.data);
-        console.log("Dashboard Data: ", response)
       } else {
         console.log("No data")
       }
@@ -41,6 +40,11 @@ const Home = () => {
     fetchDashboardData();
     return () => {}
   }, []);
+
+  useEffect(() => {
+    console.log("Dashboard Data: ", dashboardData);
+  }, [dashboardData]);
+  
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
