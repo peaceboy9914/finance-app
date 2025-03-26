@@ -4,7 +4,8 @@ const {protect} = require('../middleware/authMiddleware');
 const {
     registerUser,
     loginUser,
-    getUserInfo,
+    getUserInfo,  
+    
 } = require('../controllers/authController');
 const upload = require('../middleware/uploadMiddleware')
 
